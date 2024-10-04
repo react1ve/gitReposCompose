@@ -1,0 +1,36 @@
+plugins {
+    alias libs.plugins.hilt.plugin apply false
+    alias libs.plugins.android.application apply false
+    alias libs.plugins.android.library apply false
+    alias libs.plugins.kotlin.android apply false
+    alias libs.plugins.spotless apply false
+    alias libs.plugins.detekt apply false
+    alias libs.plugins.kotlin.kapt apply false
+    alias libs.plugins.toml.checker
+    alias libs.plugins.toml.updater
+}
+
+subprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    apply from: "${project.rootDir}/buildscripts/spotless.gradle"
+    apply from: "${project.rootDir}/buildscripts/detekt.gradle"
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            freeCompilerArgs += "-Xopt-in=kotlin.RequiresOptIn"
+            freeCompilerArgs += "-Xopt-in=kotlinx.coroutines.ExperimentalCoroutinesApi"
+            freeCompilerArgs += "-Xopt-in=androidx.paging.ExperimentalPagingApi"
+
+            jvmTarget = JavaVersion.VERSION_11
+        }
+    }
+}
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+
+apply from: "${project.rootDir}/buildscripts/toml-updater-config.gradle"

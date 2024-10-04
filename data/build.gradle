@@ -1,0 +1,42 @@
+plugins {
+    alias libs.plugins.android.library
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.hilt.plugin
+    alias libs.plugins.kotlin.kapt
+}
+
+android {
+    compileSdk 31
+
+    defaultConfig {
+        minSdk 26
+        targetSdk 31
+
+        consumerProguardFiles "consumer-rules.pro"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '1.11'
+    }
+}
+
+dependencies {
+    api(project(":domain"))
+    implementation libs.kotlin.coroutines.android
+    implementation libs.android.hilt
+    kapt libs.android.hilt.compiler
+    implementation libs.bundles.networking
+
+    implementation libs.bundles.room
+    kapt libs.room.compiler
+}

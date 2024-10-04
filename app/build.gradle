@@ -1,0 +1,75 @@
+plugins {
+    alias libs.plugins.android.application
+    alias libs.plugins.kotlin.android
+    alias libs.plugins.hilt.plugin
+    alias libs.plugins.kotlin.kapt
+}
+
+android {
+    compileSdk 31
+
+    defaultConfig {
+        applicationId "com.reactive.composerepos"
+        minSdk 26
+        targetSdk 31
+        versionCode 1
+        versionName "1.0"
+
+        testInstrumentationRunner "com.reactive.composerepos.util.HiltTestRunner"
+        vectorDrawables {
+            useSupportLibrary true
+        }
+    }
+
+    buildTypes {
+        debug {
+            manifestPlaceholders = [usesCleartextTraffic: "true"]
+        }
+        release {
+            manifestPlaceholders = [usesCleartextTraffic: "false"]
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+    kotlinOptions {
+        jvmTarget = '1.11'
+    }
+    buildFeatures {
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion libs.versions.compose.get()
+    }
+    packagingOptions {
+        resources {
+            excludes += '/META-INF/{AL2.0,LGPL2.1}'
+        }
+    }
+    testOptions {
+        animationsDisabled = true
+    }
+}
+
+dependencies {
+
+    implementation(project(":domain"))
+    implementation(project(":data"))
+    implementation libs.kotlin.coroutines.android
+    implementation libs.android.coreKtx
+    implementation libs.android.appCompat
+    implementation libs.android.material
+
+    implementation libs.bundles.compose
+    implementation libs.lottie.compose
+
+    implementation libs.android.hilt
+    implementation libs.android.hilt.compose
+    kapt libs.android.hilt.compiler
+
+
+    implementation libs.bundles.lifecycle
+}
